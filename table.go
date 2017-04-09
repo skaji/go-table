@@ -30,7 +30,9 @@ func (t *Table) Render(out io.Writer) error {
 		}
 	}
 	for i, _ := range max {
-		if i != len(max)-1 {
+		if i == len(max)-1 {
+			max[i] = 0
+		} else {
 			max[i] += 1
 		}
 	}
