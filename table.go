@@ -6,7 +6,7 @@ import (
 )
 
 type Table struct {
-	line [][]string
+	lines [][]string
 }
 
 func New() *Table {
@@ -14,15 +14,15 @@ func New() *Table {
 }
 
 func (t *Table) Add(line []string) {
-	t.line = append(t.line, line)
+	t.lines = append(t.lines, line)
 }
 
 func (t *Table) Render(out io.Writer) error {
-	if len(t.line) == 0 {
+	if len(t.lines) == 0 {
 		return nil
 	}
-	max := make([]int, len(t.line[0]))
-	for _, line := range t.line {
+	max := make([]int, len(t.lines[0]))
+	for _, line := range t.lines {
 		for i, field := range line {
 			if l := len(field); max[i] < l {
 				max[i] = l
@@ -37,9 +37,9 @@ func (t *Table) Render(out io.Writer) error {
 		}
 	}
 	LF := []byte("\n")
-	for _, line := range t.line {
+	for _, line := range t.lines {
 		for i, field := range line {
-			_, err := out.Write([]byte(pad(field, max[i])))
+			_, err := io.WriteString(out, pad(field, max[i]))
 			if err != nil {
 				return err
 			}
